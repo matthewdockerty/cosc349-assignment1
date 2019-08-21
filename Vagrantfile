@@ -10,9 +10,9 @@ Vagrant.configure("2") do |config|
         nginx.vm.network "forwarded_port", guest: 80, host: 8080, host_ip: "127.0.0.1"
         nginx.vm.network "private_network", ip: "192.168.2.11"
 
-        nginx.vm.synced_folder "./shared", "/vagrant", owner: "vagrant", group: "vagrant", mount_options: ["dmode=444,fmode=444"]
+        nginx.vm.synced_folder "./shared", "/vagrant", owner: "vagrant", group: "vagrant", mount_options: ["dmode=555,fmode=555"]
 
-        # TODO: Configure NGINX to start on boot?
+        # TODO: Configure NGINX to start on boot
         nginx.vm.provision 'shell', inline: <<-SHELL
             sudo apt-get update
             sudo apt-get install nginx -y
