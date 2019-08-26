@@ -54,5 +54,17 @@ Vagrant.configure("2") do |config|
     end
 
     # Go webapp server 2
-    
+    config.vm.define 'app2' do |app2|
+        app2.vm.hostname = "app2"
+        app2.vm.network "private_network", ip: "192.168.2.13"
+        app2.vm.synced_folder ".", "/vagrant", owner: "vagrant", group: "vagrant", mount_options: ["dmode=555,fmode=555"]
+
+        app2.vm.provision 'shell', inline: <<-SHELL
+            sudo cp /vagrant/app.service /lib/systemd/system/app.service
+            sudo echo "Environment=SERVER_NAME=app2" >> /lib/systemd/system/app.service
+            sudo systemctl start app
+            sudo systemctl enable app
+            sudo systemctl status app
+        SHELL
+    end
 end
