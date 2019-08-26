@@ -31,10 +31,9 @@ Vagrant.configure("2") do |config|
             sudo apt-get update
             sudo apt-get install nginx -y
             sudo service nginx start
-
-           # sudo cp /vagrant/nginx.conf /etc/nginx/nginx.conf
-           # sudo chmod 644 /etc/nginx/nginx.conf
-           # sudo service nginx restart
+            sudo cp /vagrant/nginx.conf /etc/nginx/nginx.conf
+            sudo chmod 644 /etc/nginx/nginx.conf
+            sudo service nginx restart
         SHELL
     end
 
