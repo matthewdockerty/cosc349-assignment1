@@ -1,0 +1,11 @@
+[Unit]
+Description=COSC349 Recipes Webapp
+
+[Install]
+WantedBy=multi-user.target
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=5s
+ExecStart=/vagrant/webapp/server
