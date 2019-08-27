@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>COSC349 Recipes App</title>
+    <link href="https://fonts.googleapis.com/css?family=Raleway:300,400,600&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            margin: 0;
+            background-color: black;
+            font-family: 'Raleway', sans-serif;
+            text-align: center;
+            justify-content: center;
+            align-items: center;
+            animation: fadein 3s;
+            color: white;
+        }
+
+        .bg-image {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            background: url("background.jpg") no-repeat center center fixed;
+            background-size: cover;
+            top: 0;
+            filter: blur(2px);
+            z-index: -1;
+        }
+
+        @keyframes fadein {
+            from {
+                opacity: 0.1;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+
+        h1 {
+            font-size: 90px;
+            font-weight: 300;
+            text-shadow: 0 0 10px black;
+            margin-top: -40px;
+        }
+
+        #try {
+            background-color: #F5A00C;
+            width: fit-content;
+            height: fit-content;
+            padding: 12px 40px;
+            font-size: 18px;
+            text-align: center;
+            border-radius: 30px;
+            border: 2px solid transparent;
+            text-decoration: none;
+            color: white;
+            transition: all 0.2s ease-in-out;
+            display: block;
+            margin: 0 auto;
+        }
+
+        #try:hover {
+            cursor: pointer;
+            border: 2px solid white;
+            transform: scale(1.02);
+        }
+
+        #content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        
+        p {
+            margin-top: 100px;
+        }
+
+        @media only screen and (max-width: 970px) {
+            h1 {
+                font-size: 80px;
+            }
+        }
+
+        @media only screen and (max-width: 780px) {
+            h1 {
+                font-size: 70px;
+            }
+
+            #try {
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="bg-image"></div>
+    <div id="content">
+        <h1>My Recipe<br>Book</h1>
+        <a id="try" href="/recipes">
+            <span>Try Now!</span>
+        </a>
+        <p>Matthew Dockerty COSC349 Assignment 1</p>
+    </div>
+</body>
+
+</html>
