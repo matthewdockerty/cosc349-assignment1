@@ -9,7 +9,6 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link href="https://fonts.googleapis.com/css?family=Raleway:300,400,600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="styles.css" />
 
     <script type='text/javascript'>
         function addIngredient() {
@@ -31,6 +30,48 @@
             }
         }
     </script>
+
+    <style>
+        body {
+            font-family: "Raleway", sans-serif;
+            margin-top: 40px;
+        }
+
+        h1 {
+            font-size: 3.5em;
+            margin-bottom: 0;
+        }
+
+        #cancel {
+            background-color: rgb(218, 100, 3);
+            width: fit-content;
+            height: fit-content;
+            padding: 8px 30px;
+            font-size: 16px;
+            text-align: center;
+            border-radius: 30px;
+            border: 1px solid transparent;
+            text-decoration: none;
+            color: white;
+            transition: transform 0.2s ease-in-out;
+            float: right;
+            margin-top: 20px;
+        }
+
+        #cancel:hover {
+            cursor: pointer;
+            /* border: 1px solid black; */
+            transform: scale(1.03);
+        }
+
+        form {
+            width: 100%;
+        }
+
+        .addContainer {
+            max-width: 800px;
+        }
+    </style>
 </head>
 
 <body>
@@ -47,7 +88,7 @@
         </div>
         <br><br>
         <div class="row">
-            <form>
+            <form enctype="multipart/form-data" method="post">
                 <div class="col-8">
                     <label>Recipe Name</label>
                     <input name="name" type="text" class="form-control" placeholder="Recipe Name" />
@@ -62,15 +103,21 @@
                     </div>
                     <a href="#" onclick="removeIngredient()">Remove Last Ingredient</a>
                 </div>
+                <br>
                 <div class="col">
                     <label>Method</label>
-                    <textarea class="form-control" placeholder="E.g.
-1. Step 1
-
-2. Step 2"></textarea>
+                    <textarea name="method" class="form-control" placeholder="E.g.
+1. Step 1...
+2. Step 2..."></textarea>
                 </div>
+                <br>
                 <div class="col">
-                    <input type="submit" value="Add Recipe"/>
+                    <label>Recipe Image:</label>
+                    <input name="image" type="file" accept="image/*" />
+                </div>
+                <br>
+                <div class="col">
+                    <input type="submit" value="Add Recipe" />
                 </div>
             </form>
         </div>
