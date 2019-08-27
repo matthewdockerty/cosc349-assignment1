@@ -18,6 +18,7 @@
             input.name = "ingredient-" + (container.children.length + 1);
             input.className = "form-control";
             input.placeholder = "Ingredient " + (container.children.length + 1);
+            input.required = true;
             container.appendChild(input);
         }
 
@@ -91,29 +92,29 @@
             <form enctype="multipart/form-data" method="post">
                 <div class="col-8">
                     <label>Recipe Name</label>
-                    <input name="name" type="text" class="form-control" placeholder="Recipe Name" />
+                    <input name="name" type="text" required class="form-control" placeholder="Recipe Name" />
                 </div>
                 <br>
                 <div class="col-6">
                     <label>Ingredients</label>
                     <a href="#" onclick="addIngredient()">Add Ingredient</a><br>
                     <div id="ingredients">
-                        <input class="form-control" type="text" name="ingredient-1" placeholder="Ingredient 1" />
-                        <input class="form-control" type="text" name="ingredient-2" placeholder="Ingredient 2" />
+                        <input class="form-control" required type="text" name="ingredient-1" placeholder="Ingredient 1" />
+                        <input class="form-control" required type="text" name="ingredient-2" placeholder="Ingredient 2" />
                     </div>
                     <a href="#" onclick="removeIngredient()">Remove Last Ingredient</a>
                 </div>
                 <br>
                 <div class="col">
                     <label>Method</label>
-                    <textarea name="method" class="form-control" placeholder="E.g.
+                    <textarea required name="method" class="form-control" placeholder="E.g.
 1. Step 1...
 2. Step 2..."></textarea>
                 </div>
                 <br>
                 <div class="col">
                     <label>Recipe Image:</label>
-                    <input name="image" id="image" type="file" accept="image/jpeg,image/jpg,image/png" />
+                    <input required name="image" id="image" type="file" accept="image/jpeg" />
                 </div>
                 <br>
                 <div class="col">
