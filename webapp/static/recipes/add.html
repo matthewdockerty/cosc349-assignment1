@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>COSC349 Recipes App</title>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Raleway:300,400,600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="styles.css" />
+
+    <script type='text/javascript'>
+        function addIngredient() {
+            let container = document.getElementById("ingredients");
+            let input = document.createElement("input");
+            input.type = "text";
+            input.name = "ingredient-" + (container.children.length + 1);
+            input.className = "form-control";
+            input.placeholder = "Ingredient " + (container.children.length + 1);
+            container.appendChild(input);
+        }
+
+        function removeIngredient(event) {
+            let container = document.getElementById("ingredients");
+            let inputs = container.children;
+            console.log(inputs);
+            if (inputs.length > 1) {
+                container.removeChild(inputs[inputs.length - 1]);
+            }
+        }
+    </script>
+</head>
+
+<body>
+    <div class="container addContainer">
+        <div class="row">
+            <div class="col-lg-9 col-md-8">
+                <h1>Add Recipe</h1>
+            </div>
+            <div class="col-lg-3 col-md-4">
+                <a id="cancel" href="/recipes">
+                    <span>Cancel</span>
+                </a>
+            </div>
+        </div>
+        <br><br>
+        <div class="row">
+            <form>
+                <div class="col-8">
+                    <label>Recipe Name</label>
+                    <input name="name" type="text" class="form-control" placeholder="Recipe Name" />
+                </div>
+                <br>
+                <div class="col-6">
+                    <label>Ingredients</label>
+                    <a href="#" onclick="addIngredient()">Add Ingredient</a><br>
+                    <div id="ingredients">
+                        <input class="form-control" type="text" name="ingredient-1" placeholder="Ingredient 1" />
+                        <input class="form-control" type="text" name="ingredient-2" placeholder="Ingredient 2" />
+                    </div>
+                    <a href="#" onclick="removeIngredient()">Remove Last Ingredient</a>
+                </div>
+                <div class="col">
+                    <label>Method</label>
+                    <textarea class="form-control" placeholder="E.g.
+1. Step 1
+
+2. Step 2"></textarea>
+                </div>
+                <div class="col">
+                    <input type="submit" value="Add Recipe"/>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+
+</html>
