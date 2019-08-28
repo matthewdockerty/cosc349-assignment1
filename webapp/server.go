@@ -107,7 +107,7 @@ func handleAdd(w http.ResponseWriter, r *http.Request) {
 
 func handleRecipe(w http.ResponseWriter, r *http.Request) {
 	recipeID := r.URL.RawQuery
-	recipe, err := GetRecipeById(recipeID)
+	recipe, err := GetRecipeByID(recipeID)
 
 	if err != nil {
 		http.Error(w, "Recipe not found", 404)

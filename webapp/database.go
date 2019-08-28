@@ -57,7 +57,7 @@ func StoreRecipe(r *Recipe) (string, error) {
 	return res.InsertedID.(primitive.ObjectID).Hex(), nil
 }
 
-func GetRecipeById(id string) (Recipe, error) {
+func GetRecipeByID(id string) (Recipe, error) {
 	var result Recipe
 	objID, _ := primitive.ObjectIDFromHex(id)
 	filter := bson.M{"_id": objID}
