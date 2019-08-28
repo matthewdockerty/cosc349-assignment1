@@ -71,6 +71,19 @@
         .addContainer {
             max-width: 800px;
         }
+
+        input[type="submit"] {
+            border-radius: 20px;
+            border: none;
+            padding: 8px 20px;
+            background-color: rgb(83, 165, 62);
+            color: white;
+            transition: transform 0.2s ease-in-out;
+        }
+
+        input[type="submit"]:hover {
+            transform: scale(1.03);
+        }
     </style>
 </head>
 
@@ -96,23 +109,25 @@
                 <br>
                 <div class="col-6">
                     <label>Ingredients</label>
-                    <a href="#" onclick="addIngredient()">Add Ingredient</a><br>
+                    <br>
                     <div id="ingredients">
                         <input class="form-control" required type="text" name="ingredient-1" placeholder="Ingredient 1" />
                         <input class="form-control" required type="text" name="ingredient-2" placeholder="Ingredient 2" />
                     </div>
-                    <a href="#" onclick="removeIngredient()">Remove Last Ingredient</a>
+                    <a href="#" onclick="removeIngredient()">Remove Ingredient</a>
+                    <a href="#" onclick="addIngredient()" style="float: right;">Add Ingredient</a>
                 </div>
                 <br>
                 <div class="col">
                     <label>Method</label>
-                    <textarea required name="method" class="form-control" placeholder="E.g.
+                    <textarea rows=6 required name="method" class="form-control" placeholder="E.g.
 1. Step 1...
 2. Step 2..."></textarea>
                 </div>
                 <br>
                 <div class="col">
                     <label>Recipe Image:</label>
+                    <br>
                     <input required name="image" id="image" type="file" accept="image/jpeg" />
                 </div>
                 <br>
