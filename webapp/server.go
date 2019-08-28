@@ -92,12 +92,24 @@ func handleAdd(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		http.Redirect(w, r, fmt.Sprintf("/recipe/%s", id), http.StatusFound)
+		http.Redirect(w, r, fmt.Sprintf("/recipe?%s", id), http.StatusFound)
 		// fmt.Fprintln(w, id)
 
 	default:
 		http.Error(w, "Method Not Supported", 405)
 	}
+}
+
+func handleRecipe(w http.ResponseWriter, r *http.Request) {
+	recipeID := r.URL.RawQuery
+	recipe, err := GetRecipeById(recipeID)
+
+	if err != nil {
+		http.Error(w, "Recipe not found", 404)
+		return
+	}
+
+	fmt.Println("%+v\n", recipe)
 }
 
 func requestHandler(w http.ResponseWriter, r *http.Request) {
@@ -110,6 +122,8 @@ func requestHandler(w http.ResponseWriter, r *http.Request) {
 		handleAdd(w, r)
 	case "/background.jpg":
 		http.ServeFile(w, r, "static/background.jpg")
+	case "/recipe":
+		handleRecipe(w, r)
 	default:
 		http.Error(w, "404 Not Found", 404)
 	}

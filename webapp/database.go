@@ -5,6 +5,8 @@ import (
 	"errors"
 	"fmt"
 
+	"go.mongodb.org/mongo-driver/bson"
+
 	"go.mongodb.org/mongo-driver/bson/primitive"
 
 	"go.mongodb.org/mongo-driver/mongo"
@@ -21,10 +23,9 @@ type Recipe struct {
 }
 
 var db *mongo.Database
-var ctx context.Context
 
 func InitDB() error {
-	ctx = context.Background()
+	ctx := context.Background()
 	ctx, cancel := context.WithCancel(ctx)
 	defer cancel()
 	ctx = context.WithValue(ctx, key("host"), "localhost:27017")
@@ -47,11 +48,24 @@ func InitDB() error {
 }
 
 func StoreRecipe(r *Recipe) (string, error) {
-	res, err := db.Collection("recipes").InsertOne(ctx, r)
+	res, err := db.Collection("recipes").InsertOne(context.TODO(), r)
 
 	if err != nil {
 		return "", errors.New("Unable to insert recipe into collection")
 	}
 
 	return res.InsertedID.(primitive.ObjectID).Hex(), nil
+}
+
+func GetRecipeById(id string) (Recipe, error) {
+	var result Recipe
+	objID, _ := primitive.ObjectIDFromHex(id)
+	filter := bson.M{"_id": objID}
+	err := db.Collection("recipes").FindOne(context.TODO(), filter).Decode(&result)
+
+	if err != nil {
+		return result, errors.New("Recipe not found")
+	}
+
+	return result, nil
 }
