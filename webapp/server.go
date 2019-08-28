@@ -110,10 +110,27 @@ func handleRecipe(w http.ResponseWriter, r *http.Request) {
 
 	t, err := template.ParseFiles("static/recipe.html")
 	if err != nil {
-		log.Print(err)
+		http.Error(w, "Unable to parse template file", 500)
 		return
 	}
 	t.Execute(w, recipe)
+}
+
+func handleRecipes(w http.ResponseWriter, r *http.Request) {
+	recipes, err := GetAllRecipes()
+
+	if err != nil {
+		http.Error(w, err.Error(), 500)
+		return
+	}
+
+	t, err := template.ParseFiles("static/recipes.html")
+	if err != nil {
+		http.Error(w, "Unable to parse template file", 500)
+		return
+	}
+
+	t.Execute(w, recipes)
 }
 
 func requestHandler(w http.ResponseWriter, r *http.Request) {
@@ -121,7 +138,7 @@ func requestHandler(w http.ResponseWriter, r *http.Request) {
 	case "/":
 		http.ServeFile(w, r, "static/index.html")
 	case "/recipes", "/recipes/":
-		http.ServeFile(w, r, "static/recipes.html")
+		handleRecipes(w, r)
 	case "/add", "/add/":
 		handleAdd(w, r)
 	case "/background.jpg":

@@ -69,3 +69,16 @@ func GetRecipeById(id string) (Recipe, error) {
 
 	return result, nil
 }
+
+func GetAllRecipes() ([]Recipe, error) {
+	var results []Recipe
+
+	cursor, err := db.Collection("recipes").Find(context.TODO(), bson.D{})
+	if err != nil {
+		return nil, errors.New("Unable to get all recipes")
+	}
+
+	cursor.All(context.TODO(), &results)
+
+	return results, nil
+}

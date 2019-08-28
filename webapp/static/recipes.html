@@ -95,30 +95,17 @@
             </div>
         </div>
         <div class="row">
+            {{range .}}
             <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12 square">
+
                 <div class="content"
-                    style="background-image: url('https://www.budgetbytes.com/wp-content/uploads/2013/07/Creamy-Tomato-and-Spinach-Pasta-skillet-1-500x480.jpg');">
-                    <span>Tomato, Spinach & Ricotta Pasta</span>
+                    style="background-image: url('data:image/jpg;base64, {{.Image}}');">
+                    <span>{{.Name}}</span>
                 </div>
             </div>
-            <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12 square">
-                <div class="content"
-                    style="background-image: url('https://pinchofyum.com/wp-content/uploads/Buffalo-Cauliflower-Tacos-with-Avocado-Crema-Recipe.jpg');">
-                    <span>Buffalo Cauliflower Tacos with Avocado Crema</span>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12 square">
-                <div class="content"
-                    style="background-image: url('https://valentinascorner.com/wp-content/uploads/2018/12/Romaine-Avocado-Chicken-Salad-Recipe-3-500x500.jpg');">
-                    <span>Romaine Avocado Chicken Salad</span>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12 square">
-                <div class="content"
-                    style="background-image: url('https://valentinascorner.com/wp-content/uploads/2018/12/Romaine-Avocado-Chicken-Salad-Recipe-3-500x500.jpg');">
-                    <span>Romaine Avocado Chicken Salad</span>
-                </div>
-            </div>
+
+            {{end}}
+           
         </div>
     </div>
 </body>
