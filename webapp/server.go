@@ -139,6 +139,18 @@ func handleRecipes(w http.ResponseWriter, r *http.Request) {
 	t.Execute(w, recipes)
 }
 
+func handleDelete(w http.ResponseWriter, r *http.Request) {
+	recipeID := r.URL.RawQuery
+	err := DeleteRecipeByID(recipeID)
+
+	if err != nil {
+		http.Error(w, "Unable to delete recipe", 500)
+		return
+	}
+
+	http.Redirect(w, r, fmt.Sprintf("/recipes"), http.StatusMovedPermanently)
+}
+
 func requestHandler(w http.ResponseWriter, r *http.Request) {
 	switch r.URL.Path {
 	case "/":
@@ -147,6 +159,8 @@ func requestHandler(w http.ResponseWriter, r *http.Request) {
 		handleRecipes(w, r)
 	case "/add", "/add/":
 		handleAdd(w, r)
+	case "/delete":
+		handleDelete(w, r)
 	case "/background.jpg":
 		http.ServeFile(w, r, "static/background.jpg")
 	case "/recipe":

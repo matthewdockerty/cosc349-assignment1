@@ -97,3 +97,14 @@ func GetAllRecipes() (map[string]Recipe, error) {
 
 	return results, nil
 }
+
+func DeleteRecipeByID(id string) error {
+	objID, _ := primitive.ObjectIDFromHex(id)
+	_, err := db.Collection("recipes").DeleteOne(context.TODO(), bson.M{"_id": objID})
+
+	if err != nil {
+		return errors.New("Unable to delete recipe")
+	}
+
+	return nil
+}
