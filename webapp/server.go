@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/base64"
 	"fmt"
+	"html"
 	"image"
 	_ "image/jpeg"
 	_ "image/png"
@@ -58,6 +59,10 @@ func handleAdd(w http.ResponseWriter, r *http.Request) {
 		name := r.FormValue("name")
 		method := r.FormValue("method")
 
+		name = html.EscapeString(name)
+		method = html.EscapeString(method)
+		method = strings.ReplaceAll(method, "\n", "<br>")
+
 		if len(name) == 0 || len(method) == 0 {
 			http.Error(w, "Missing required fields", 400)
 			return
@@ -66,6 +71,7 @@ func handleAdd(w http.ResponseWriter, r *http.Request) {
 		i := 1
 		var ingredients []string
 		ingredient := r.FormValue(strings.Join([]string{"ingredient-", strconv.Itoa(i)}, ""))
+		ingredient = html.EscapeString(ingredient)
 		for len(ingredient) != 0 {
 			ingredients = append(ingredients, ingredient)
 			i++
