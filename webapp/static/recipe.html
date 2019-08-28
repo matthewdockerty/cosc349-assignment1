@@ -56,6 +56,18 @@
 
         #img {
             text-align: center;
+            border-radius: 100%;
+            padding: 0;
+            margin: 0;
+            background-size: cover;
+        }
+
+        #img:before {
+            content: "";
+            display: block;
+            padding: 0;
+            margin: 0;
+            padding-top: 100%;
         }
 
         #method {
@@ -72,8 +84,10 @@
     <div class="container">
         <a href="/recipes" style="float: left; margin-top: 16px;">Back</a><h1>{{.Name}}</h1>
         <div class="row">
-            <div class="col-lg-6" id="img">
-                <img src="data:image/jpg;base64, {{.Image}}" />
+            <div class="col-lg-6">
+                <div id="img" style="background-image: url('data:image/jpg;base64, {{.Image}}');">
+
+                </div>
             </div>
             <div class="col-lg-6" id="ingredients">
                 <h2>Ingredients</h2>
