@@ -17,13 +17,6 @@ import (
 // const RESOURCE_FOLDER = "/vagrant/webapp/static"
 const resourceFolder = "static"
 
-type Recipe struct {
-	Name        string
-	Method      string
-	Ingredients []string
-	Image       []byte
-}
-
 func handleAdd(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case "GET":
@@ -93,7 +86,14 @@ func handleAdd(w http.ResponseWriter, r *http.Request) {
 		}
 
 		fmt.Printf("%+v\n", recipe)
-		// TODO: Store in db...
+		id, err := StoreRecipe(recipe)
+		if err != nil {
+			http.Error(w, err.Error(), 500)
+			return
+		}
+
+		http.Redirect(w, r, fmt.Sprintf("/recipe/%s", id), http.StatusFound)
+		// fmt.Fprintln(w, id)
 
 	default:
 		http.Error(w, "Method Not Supported", 405)
@@ -108,14 +108,20 @@ func requestHandler(w http.ResponseWriter, r *http.Request) {
 		http.ServeFile(w, r, "static/recipes.html")
 	case "/add", "/add/":
 		handleAdd(w, r)
+	case "/background.jpg":
+		http.ServeFile(w, r, "static/background.jpg")
 	default:
 		http.Error(w, "404 Not Found", 404)
 	}
 }
 
 func main() {
-	http.HandleFunc("/", requestHandler)
+	log.Println("Connecting to MongoDB...")
+	if err := InitDB(); err != nil {
+		log.Panic("Unable to connect to database")
+	}
 
 	log.Println("Starting recipe webapp server " + os.Getenv("SERVER_NAME"))
+	http.HandleFunc("/", requestHandler)
 	http.ListenAndServe(":3000", nil)
 }

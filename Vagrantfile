@@ -13,7 +13,7 @@ Vagrant.configure("2") do |config|
         build.vm.provision 'shell', inline: <<-SHELL
             wget https://dl.google.com/go/go1.12.9.linux-amd64.tar.gz
             tar -C /usr/local -xzf go1.12.9.linux-amd64.tar.gz
-
+            
             cd /vagrant/webapp
             /usr/local/go/bin/go build server.go
         SHELL
