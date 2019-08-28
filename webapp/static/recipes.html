@@ -95,17 +95,18 @@
             </div>
         </div>
         <div class="row">
-            {{range .}}
+            {{range $key, $value := .}}
             <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12 square">
 
-                <div class="content"
-                    style="background-image: url('data:image/jpg;base64, {{.Image}}');">
-                    <span>{{.Name}}</span>
-                </div>
+                <a href="/recipe?{{$key}}">
+                    <div class="content" style="background-image: url('data:image/jpg;base64, {{$value.Image}}');">
+                        <span>{{$value.Name}}</span>
+                    </div>
+                </a>
             </div>
 
             {{end}}
-           
+
         </div>
     </div>
 </body>

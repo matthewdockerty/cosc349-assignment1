@@ -70,15 +70,30 @@ func GetRecipeById(id string) (Recipe, error) {
 	return result, nil
 }
 
-func GetAllRecipes() ([]Recipe, error) {
-	var results []Recipe
+func GetAllRecipes() (map[string]Recipe, error) {
 
 	cursor, err := db.Collection("recipes").Find(context.TODO(), bson.D{})
 	if err != nil {
 		return nil, errors.New("Unable to get all recipes")
 	}
+	defer cursor.Close(context.TODO())
 
-	cursor.All(context.TODO(), &results)
+	results := make(map[string]Recipe)
+
+	for cursor.Next(context.TODO()) {
+		var r Recipe
+		err := cursor.Decode(&r)
+		if err != nil {
+			return nil, errors.New("Unable to decode recipe")
+		}
+
+		// Get object ID from cursor
+		vals, _ := cursor.Current.Values()
+		var id primitive.ObjectID
+		vals[0].Unmarshal(&id)
+
+		results[id.Hex()] = r
+	}
 
 	return results, nil
 }
