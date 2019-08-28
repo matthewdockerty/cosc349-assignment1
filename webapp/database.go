@@ -19,7 +19,7 @@ type Recipe struct {
 	Name        string
 	Method      string
 	Ingredients []string
-	Image       []byte
+	Image       string // base64 encoded
 }
 
 var db *mongo.Database

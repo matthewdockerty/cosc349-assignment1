@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"encoding/base64"
 	"fmt"
 	"image"
 	_ "image/jpeg"
@@ -12,10 +13,8 @@ import (
 	"os"
 	"strconv"
 	"strings"
+	"text/template"
 )
-
-// const RESOURCE_FOLDER = "/vagrant/webapp/static"
-const resourceFolder = "static"
 
 func handleAdd(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
@@ -78,14 +77,15 @@ func handleAdd(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
+		image := base64.StdEncoding.EncodeToString(bs)
+
 		recipe := &Recipe{
 			Name:        name,
 			Method:      method,
 			Ingredients: ingredients,
-			Image:       bs,
+			Image:       image,
 		}
 
-		fmt.Printf("%+v\n", recipe)
 		id, err := StoreRecipe(recipe)
 		if err != nil {
 			http.Error(w, err.Error(), 500)
@@ -93,7 +93,6 @@ func handleAdd(w http.ResponseWriter, r *http.Request) {
 		}
 
 		http.Redirect(w, r, fmt.Sprintf("/recipe?%s", id), http.StatusFound)
-		// fmt.Fprintln(w, id)
 
 	default:
 		http.Error(w, "Method Not Supported", 405)
@@ -109,7 +108,12 @@ func handleRecipe(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	fmt.Println("%+v\n", recipe)
+	t, err := template.ParseFiles("static/recipe.html")
+	if err != nil {
+		log.Print(err)
+		return
+	}
+	t.Execute(w, recipe)
 }
 
 func requestHandler(w http.ResponseWriter, r *http.Request) {
