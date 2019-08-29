@@ -17,10 +17,12 @@ import (
 	"text/template"
 )
 
+var resourceDir = os.Getenv("CONTENT_PATH")
+
 func handleAdd(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case "GET":
-		http.ServeFile(w, r, "static/add.html")
+		http.ServeFile(w, r, resourceDir+"add.html")
 	case "POST":
 		if err := r.ParseForm(); err != nil {
 			http.Error(w, "Unable to parse form", 400)
@@ -114,7 +116,7 @@ func handleRecipe(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	t, err := template.ParseFiles("static/recipe.html")
+	t, err := template.ParseFiles(resourceDir + "recipe.html")
 	if err != nil {
 		http.Error(w, "Unable to parse template file", 500)
 		return
@@ -130,7 +132,7 @@ func handleRecipes(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	t, err := template.ParseFiles("static/recipes.html")
+	t, err := template.ParseFiles(resourceDir + "recipes.html")
 	if err != nil {
 		http.Error(w, "Unable to parse template file", 500)
 		return
@@ -154,7 +156,7 @@ func handleDelete(w http.ResponseWriter, r *http.Request) {
 func requestHandler(w http.ResponseWriter, r *http.Request) {
 	switch r.URL.Path {
 	case "/":
-		http.ServeFile(w, r, "static/index.html")
+		http.ServeFile(w, r, resourceDir+"index.html")
 	case "/recipes", "/recipes/":
 		handleRecipes(w, r)
 	case "/add", "/add/":
@@ -162,7 +164,7 @@ func requestHandler(w http.ResponseWriter, r *http.Request) {
 	case "/delete":
 		handleDelete(w, r)
 	case "/background.jpg":
-		http.ServeFile(w, r, "static/background.jpg")
+		http.ServeFile(w, r, resourceDir+"background.jpg")
 	case "/recipe":
 		handleRecipe(w, r)
 	default:

@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"os"
 
 	"go.mongodb.org/mongo-driver/bson"
 
@@ -22,7 +23,8 @@ type Recipe struct {
 
 var db *mongo.Database
 
-const dbHost = "localhost:27017"
+var dbHost = os.Getenv("DB_HOST")
+
 const dbName = "recipesdb"
 const recipesCollectionName = "recipes"
 
