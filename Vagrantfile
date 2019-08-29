@@ -42,7 +42,6 @@ Vagrant.configure("2") do |config|
     config.vm.define 'mongo' do |mongo|
         mongo.vm.hostname = "mongo"
         mongo.vm.network "private_network", ip: "192.168.2.14"
-        mongo.vm.network "forwarded_port", guest: 27017, host: 27017
         mongo.vm.synced_folder ".", "/vagrant", owner: "vagrant", group: "vagrant", mount_options: ["dmode=555,fmode=555"]
 
         mongo.vm.provision 'shell', inline: <<-SHELL
