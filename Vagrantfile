@@ -13,9 +13,10 @@ Vagrant.configure("2") do |config|
         build.vm.provision 'shell', inline: <<-SHELL
             wget https://dl.google.com/go/go1.12.9.linux-amd64.tar.gz
             tar -C /usr/local -xzf go1.12.9.linux-amd64.tar.gz
-            
-            cd /vagrant/webapp
-            /usr/local/go/bin/go build server.go
+
+            /usr/local/go/bin/go get go.mongodb.org/mongo-driver
+
+            /vagrant/build.sh
         SHELL
     end
 
@@ -26,10 +27,10 @@ Vagrant.configure("2") do |config|
         nginx.vm.network "private_network", ip: "192.168.2.11"
         nginx.vm.synced_folder ".", "/vagrant", owner: "vagrant", group: "vagrant", mount_options: ["dmode=555,fmode=555"]
 
-        # TODO: Configure NGINX to start on boot
         nginx.vm.provision 'shell', inline: <<-SHELL
             sudo apt-get update
             sudo apt-get install nginx -y
+            sudo service nginx enable
             sudo service nginx start
             sudo cp /vagrant/nginx.conf /etc/nginx/nginx.conf
             sudo chmod 644 /etc/nginx/nginx.conf
