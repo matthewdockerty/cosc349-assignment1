@@ -24,14 +24,18 @@ type Recipe struct {
 
 var db *mongo.Database
 
+const dbHost = "localhost:27017"
+const dbName = "recipesdb"
+const recipesCollectionName = "recipes"
+
+var recipesCollection *mongo.Collection
+
 func InitDB() error {
 	ctx := context.Background()
 	ctx, cancel := context.WithCancel(ctx)
 	defer cancel()
-	ctx = context.WithValue(ctx, key("host"), "localhost:27017")
-	ctx = context.WithValue(ctx, key("database"), "recipesdb")
 
-	uri := fmt.Sprintf(`mongodb://%s/%s`, ctx.Value(key("host")), ctx.Value(key("database")))
+	uri := fmt.Sprintf(`mongodb://%s/%s`, dbHost, dbName)
 
 	client, err := mongo.NewClient(options.Client().ApplyURI(uri))
 	if err != nil {
@@ -42,13 +46,13 @@ func InitDB() error {
 		return errors.New("Mongo client couldn't connect with background context")
 	}
 
-	db = client.Database("recipesdb")
-
+	db = client.Database(dbName)
+	recipesCollection = db.Collection(recipesCollectionName)
 	return nil
 }
 
 func StoreRecipe(r *Recipe) (string, error) {
-	res, err := db.Collection("recipes").InsertOne(context.TODO(), r)
+	res, err := recipesCollection.InsertOne(context.TODO(), r)
 
 	if err != nil {
 		return "", errors.New("Unable to insert recipe into collection")
@@ -61,7 +65,7 @@ func GetRecipeByID(id string) (Recipe, error) {
 	var result Recipe
 	objID, _ := primitive.ObjectIDFromHex(id)
 	filter := bson.M{"_id": objID}
-	err := db.Collection("recipes").FindOne(context.TODO(), filter).Decode(&result)
+	err := recipesCollection.FindOne(context.TODO(), filter).Decode(&result)
 
 	if err != nil {
 		return result, errors.New("Recipe not found")
@@ -72,7 +76,7 @@ func GetRecipeByID(id string) (Recipe, error) {
 
 func GetAllRecipes() (map[string]Recipe, error) {
 
-	cursor, err := db.Collection("recipes").Find(context.TODO(), bson.D{})
+	cursor, err := recipesCollection.Find(context.TODO(), bson.D{})
 	if err != nil {
 		return nil, errors.New("Unable to get all recipes")
 	}
@@ -100,7 +104,7 @@ func GetAllRecipes() (map[string]Recipe, error) {
 
 func DeleteRecipeByID(id string) error {
 	objID, _ := primitive.ObjectIDFromHex(id)
-	_, err := db.Collection("recipes").DeleteOne(context.TODO(), bson.M{"_id": objID})
+	_, err := recipesCollection.DeleteOne(context.TODO(), bson.M{"_id": objID})
 
 	if err != nil {
 		return errors.New("Unable to delete recipe")
