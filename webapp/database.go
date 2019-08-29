@@ -13,8 +13,6 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-type key string
-
 type Recipe struct {
 	Name        string
 	Method      string
