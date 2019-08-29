@@ -20,14 +20,18 @@
             input.placeholder = "Ingredient " + (container.children.length + 1);
             input.required = true;
             container.appendChild(input);
+
+            return false;
         }
 
-        function removeIngredient(event) {
+        function removeIngredient() {
             let container = document.getElementById("ingredients");
             let inputs = container.children;
             if (inputs.length > 1) {
                 container.removeChild(inputs[inputs.length - 1]);
             }
+
+            return false;
         }
     </script>
 
@@ -81,6 +85,7 @@
             background-color: rgb(83, 165, 62);
             color: white;
             transition: transform 0.2s ease-in-out;
+            margin-top: 20px;
         }
 
         input[type="submit"]:hover {
@@ -116,8 +121,8 @@
                         <input class="form-control" required type="text" name="ingredient-1" placeholder="Ingredient 1" />
                         <input class="form-control" required type="text" name="ingredient-2" placeholder="Ingredient 2" />
                     </div>
-                    <a href="#" onclick="removeIngredient()">Remove Ingredient</a>
-                    <a href="#" onclick="addIngredient()" style="float: right;">Add Ingredient</a>
+                    <a href="#" onclick="return removeIngredient()">Remove Ingredient</a>
+                    <a href="#" onclick="return addIngredient()" style="float: right;">Add Ingredient</a>
                 </div>
                 <br>
                 <div class="col">
