@@ -45,8 +45,8 @@ func handleAdd(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		if len(bs) > 5e6 {
-			http.Error(w, "Image too large (5MB limit)", 400)
+		if len(bs) > 1e6 {
+			http.Error(w, "Image too large (1MB limit)", 400)
 			return
 		}
 

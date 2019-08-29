@@ -48,6 +48,7 @@ func InitDB() error {
 
 	db = client.Database(dbName)
 	recipesCollection = db.Collection(recipesCollectionName)
+
 	return nil
 }
 
