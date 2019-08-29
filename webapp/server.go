@@ -18,6 +18,12 @@ import (
 )
 
 var resourceDir = os.Getenv("CONTENT_PATH")
+var serverName = os.Getenv("SERVER_NAME")
+
+type response struct {
+	ServerName string
+	Response   interface{}
+}
 
 func handleAdd(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
@@ -138,7 +144,7 @@ func handleRecipes(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	t.Execute(w, recipes)
+	t.Execute(w, response{serverName, recipes})
 }
 
 func handleDelete(w http.ResponseWriter, r *http.Request) {
@@ -178,7 +184,7 @@ func main() {
 		log.Panic("Unable to connect to database")
 	}
 
-	log.Println("Starting recipe webapp server " + os.Getenv("SERVER_NAME"))
+	log.Println("Starting recipe webapp server " + serverName)
 	http.HandleFunc("/", requestHandler)
 	http.ListenAndServe(":3000", nil)
 }
