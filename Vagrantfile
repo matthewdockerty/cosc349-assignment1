@@ -54,7 +54,7 @@ Vagrant.configure("2") do |config|
             
             while netstat -lnt | awk '$4 ~ /:27017$/ {exit 1}'; do sleep 1; done
 
-            mongo < /vagrant/initdb.js
+            mongo < /vagrant/data/load.js
         
             sudo cp /vagrant/mongod.conf /etc/mongod.conf
             sudo service mongod restart
