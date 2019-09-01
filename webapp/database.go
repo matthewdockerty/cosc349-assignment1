@@ -14,6 +14,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
+// Recipe struct stores data for a recipe.
 type Recipe struct {
 	Name        string
 	Method      string
@@ -21,15 +22,21 @@ type Recipe struct {
 	Image       string // base64 encoded
 }
 
-var db *mongo.Database
-
-var dbHost = os.Getenv("DB_HOST")
-
+// Database host address & port, database name, & collection name constants
+var dbHost = os.Getenv("DB_HOST") // Environment variable is set by Vagrant during the provisioning process
 const dbName = "recipesdb"
 const recipesCollectionName = "recipes"
 
+// Pointers to database & collection structs.
+var db *mongo.Database
 var recipesCollection *mongo.Collection
 
+/*
+InitDB connects to the MongoDB database and initializes the values of
+the database & collection pointers defined above.
+
+This function returns an error if the connection was unsuccessful.
+*/
 func InitDB() error {
 	ctx := context.Background()
 	ctx, cancel := context.WithCancel(ctx)
@@ -52,6 +59,14 @@ func InitDB() error {
 	return nil
 }
 
+/*
+StoreRecipe stores the data for the given recipe in the database.
+No input checking or serialization is performed here.
+
+It returns the object ID of the recipe (or an empty string if storing
+was unsuccessful) and an error if one was encountered while attempting
+storage.
+*/
 func StoreRecipe(r *Recipe) (string, error) {
 	res, err := recipesCollection.InsertOne(context.TODO(), r)
 
@@ -62,6 +77,11 @@ func StoreRecipe(r *Recipe) (string, error) {
 	return res.InsertedID.(primitive.ObjectID).Hex(), nil
 }
 
+/*
+GetRecipeByID retrieves the recipe with the given object ID from the
+database and an error if any are encountered (e.g. if no recipe is
+associated with the ID).
+*/
 func GetRecipeByID(id string) (Recipe, error) {
 	var result Recipe
 	objID, _ := primitive.ObjectIDFromHex(id)
@@ -75,6 +95,11 @@ func GetRecipeByID(id string) (Recipe, error) {
 	return result, nil
 }
 
+/*
+GetAllRecipes retrieves all recipes from the database and returns them in a
+map with object IDs as keys and recipe structs as values. It also returns
+any errors encountered.
+*/
 func GetAllRecipes() (map[string]Recipe, error) {
 
 	cursor, err := recipesCollection.Find(context.TODO(), bson.D{})
@@ -103,6 +128,10 @@ func GetAllRecipes() (map[string]Recipe, error) {
 	return results, nil
 }
 
+/*
+DeleteRecipeByID deletes the recipe with the given object ID from the
+database. It returns an error if one was encountered.
+*/
 func DeleteRecipeByID(id string) error {
 	objID, _ := primitive.ObjectIDFromHex(id)
 	_, err := recipesCollection.DeleteOne(context.TODO(), bson.M{"_id": objID})
