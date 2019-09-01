@@ -28,13 +28,13 @@ Vagrant.configure("2") do |config|
         nginx.vm.synced_folder ".", "/vagrant", owner: "vagrant", group: "vagrant", mount_options: ["dmode=555,fmode=555"]
 
         nginx.vm.provision 'shell', inline: <<-SHELL
-            sudo apt-get update
-            sudo apt-get install nginx -y
-            sudo service nginx enable
-            sudo service nginx start
-            sudo cp /vagrant/nginx.conf /etc/nginx/nginx.conf
-            sudo chmod 644 /etc/nginx/nginx.conf
-            sudo service nginx restart
+            apt-get update
+            apt-get install nginx -y
+            service nginx enable
+            service nginx start
+            cp /vagrant/nginx.conf /etc/nginx/nginx.conf
+            chmod 644 /etc/nginx/nginx.conf
+            service nginx restart
         SHELL
     end
 
@@ -45,19 +45,19 @@ Vagrant.configure("2") do |config|
         mongo.vm.synced_folder ".", "/vagrant", owner: "vagrant", group: "vagrant", mount_options: ["dmode=555,fmode=555"]
 
         mongo.vm.provision 'shell', inline: <<-SHELL
-            wget -qO - https://www.mongodb.org/static/pgp/server-4.2.asc | sudo apt-key add -
-            echo "deb [ arch=amd64 ] https://repo.mongodb.org/apt/ubuntu xenial/mongodb-org/4.2 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-4.2.list
-            sudo apt-get update
-            sudo apt-get install -y mongodb-org
-            sudo systemctl enable mongod
-            sudo service mongod start
+            wget -qO - https://www.mongodb.org/static/pgp/server-4.2.asc | apt-key add -
+            echo "deb [ arch=amd64 ] https://repo.mongodb.org/apt/ubuntu xenial/mongodb-org/4.2 multiverse" | tee /etc/apt/sources.list.d/mongodb-org-4.2.list
+            apt-get update
+            apt-get install -y mongodb-org
+            systemctl enable mongod
+            service mongod start
             
             while netstat -lnt | awk '$4 ~ /:27017$/ {exit 1}'; do sleep 1; done
 
             mongo < /vagrant/data/load.js
         
-            sudo cp /vagrant/mongod.conf /etc/mongod.conf
-            sudo service mongod restart
+            cp /vagrant/mongod.conf /etc/mongod.conf
+            service mongod restart
         SHELL
     end
 
@@ -68,11 +68,10 @@ Vagrant.configure("2") do |config|
         app1.vm.synced_folder ".", "/vagrant", owner: "vagrant", group: "vagrant", mount_options: ["dmode=555,fmode=555"]
 
         app1.vm.provision 'shell', inline: <<-SHELL
-            sudo cp /vagrant/app.service /lib/systemd/system/app.service
-            sudo echo -e "Environment=SERVER_NAME=app1\nEnvironment=CONTENT_PATH=/vagrant/webapp/static/\nEnvironment=DB_HOST=192.168.2.14:27017" >> /lib/systemd/system/app.service
-            sudo systemctl start app
-            sudo systemctl enable app
-            sudo systemctl status app
+            cp /vagrant/app.service /lib/systemd/system/app.service
+            echo -e "Environment=SERVER_NAME=app1\nEnvironment=CONTENT_PATH=/vagrant/webapp/static/\nEnvironment=DB_HOST=192.168.2.14:27017" >> /lib/systemd/system/app.service
+            systemctl start app
+            systemctl enable app
         SHELL
     end
 
@@ -83,11 +82,10 @@ Vagrant.configure("2") do |config|
         app2.vm.synced_folder ".", "/vagrant", owner: "vagrant", group: "vagrant", mount_options: ["dmode=555,fmode=555"]
 
         app2.vm.provision 'shell', inline: <<-SHELL
-            sudo cp /vagrant/app.service /lib/systemd/system/app.service
-            sudo echo -e "Environment=SERVER_NAME=app2\nEnvironment=CONTENT_PATH=/vagrant/webapp/static/\nEnvironment=DB_HOST=192.168.2.14:27017" >> /lib/systemd/system/app.service
-            sudo systemctl start app
-            sudo systemctl enable app
-            sudo systemctl status app
+            cp /vagrant/app.service /lib/systemd/system/app.service
+            echo -e "Environment=SERVER_NAME=app2\nEnvironment=CONTENT_PATH=/vagrant/webapp/static/\nEnvironment=DB_HOST=192.168.2.14:27017" >> /lib/systemd/system/app.service
+            systemctl start app
+            systemctl enable app
         SHELL
     end
 end
