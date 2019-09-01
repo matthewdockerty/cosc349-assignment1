@@ -17,14 +17,33 @@ import (
 	"text/template"
 )
 
+// Static content directory path. Environment variable set by Vagrant during provisioning.
 var resourceDir = os.Getenv("CONTENT_PATH")
+
+/* Server instance name. Each running instance has a different environment
+variable value set during provisioning. This name is shown on the main recipes
+page to demonstrate load balancing behaviour and to show which instance served
+the request.
+*/
 var serverName = os.Getenv("SERVER_NAME")
 
+/*
+Response struct is used to pass the server instance name and a response of any
+type to the template engine whenever we want to display the server name to the
+user on the webpage.
+*/
 type response struct {
 	ServerName string
 	Response   interface{}
 }
 
+/*
+handleAdd deals with all requests related to adding recipes.
+URI: /add
+
+It serves the add recipes form page and handles post requests from the
+submitted form to save new recipes.
+*/
 func handleAdd(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case "GET":
@@ -34,6 +53,8 @@ func handleAdd(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, "Unable to parse form", 400)
 			return
 		}
+
+		// Handle image upload. Read data & convert to base64
 
 		file, info, err := r.FormFile("image")
 		if err != nil {
@@ -64,6 +85,10 @@ func handleAdd(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
+		image := base64.StdEncoding.EncodeToString(bs)
+
+		// Read & escape all other fields from form data.
+
 		name := r.FormValue("name")
 		method := r.FormValue("method")
 
@@ -76,6 +101,8 @@ func handleAdd(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
+		/* Read ingredients from form data - needs to be handled seperately
+		as there can be an arbitrary number of ingredients */
 		i := 1
 		var ingredients []string
 		ingredient := r.FormValue(strings.Join([]string{"ingredient-", strconv.Itoa(i)}, ""))
@@ -91,8 +118,6 @@ func handleAdd(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		image := base64.StdEncoding.EncodeToString(bs)
-
 		recipe := &Recipe{
 			Name:        name,
 			Method:      method,
@@ -106,6 +131,7 @@ func handleAdd(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
+		// Redirect to main recipes list page.
 		http.Redirect(w, r, fmt.Sprintf("/recipe?%s", id), http.StatusFound)
 
 	default:
@@ -113,6 +139,10 @@ func handleAdd(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+/*
+handleRecipe deals with all requests to view an individual recipe.
+URI: /recipe?<recipe_id>
+*/
 func handleRecipe(w http.ResponseWriter, r *http.Request) {
 	recipeID := r.URL.RawQuery
 	recipe, err := GetRecipeByID(recipeID)
@@ -130,6 +160,10 @@ func handleRecipe(w http.ResponseWriter, r *http.Request) {
 	t.Execute(w, recipe)
 }
 
+/*
+handleRecipes deals with requests to view all recipes.
+URI: /recipes
+*/
 func handleRecipes(w http.ResponseWriter, r *http.Request) {
 	recipes, err := GetAllRecipes()
 
@@ -147,6 +181,13 @@ func handleRecipes(w http.ResponseWriter, r *http.Request) {
 	t.Execute(w, response{serverName, recipes})
 }
 
+/*
+handleDelete deals with requests to delete a given recipe.
+URI: /delete?<recipe_id>
+
+This function accepts any HTTP method because the frontend does
+not use AJAX requests, so we can't easily perform a DELETE request.
+*/
 func handleDelete(w http.ResponseWriter, r *http.Request) {
 	recipeID := r.URL.RawQuery
 	err := DeleteRecipeByID(recipeID)
@@ -159,6 +200,10 @@ func handleDelete(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, fmt.Sprintf("/recipes"), http.StatusMovedPermanently)
 }
 
+/*
+	requestHandler handles all incoming requests and routes them to the correct
+	function accordingly, or returns a 404 if a non-existent resource is requested.
+*/
 func requestHandler(w http.ResponseWriter, r *http.Request) {
 	switch r.URL.Path {
 	case "/":
@@ -178,13 +223,14 @@ func requestHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// main function initializes the database connection and starts the http server.
 func main() {
 	log.Println("Connecting to MongoDB...")
 	if err := InitDB(); err != nil {
 		log.Panic("Unable to connect to database")
 	}
 
-	log.Println("Starting recipe webapp server " + serverName)
+	log.Println("Starting recipe webapp server " + serverName + "...")
 	http.HandleFunc("/", requestHandler)
 	http.ListenAndServe(":3000", nil)
 }
