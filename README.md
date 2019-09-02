@@ -60,4 +60,5 @@ The following diagram shows the interactions between the virtual machines
 This project is licensed under the MIT License (see [LICENSE](/LICENSE))
 
 ## Acknowledgments
-- David Eyers - COSC349 Lecturer
+- David Eyers - COSC349 lecturer
+- [foodista.com](https://www.foodista.com/) - CC BY 3.0 licensed recipes used in example data
