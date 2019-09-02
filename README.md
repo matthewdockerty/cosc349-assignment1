@@ -16,6 +16,8 @@ Run the ```vagrant up``` command in the root project directory to start the virt
 
 Once this process has completed, the application will be available at [http://localhost:8080](http://localhost:8080).
 
+The virtual machines can be shutdown using the ```vagrant halt``` command, or deleted using ```vagrant destroy```.
+
 ### Building
 The web application only needs to be rebuilt when Go source files have been changed. If any static resources or template files are changed, this will be immediately reflected.
 
