@@ -201,8 +201,8 @@ func handleDelete(w http.ResponseWriter, r *http.Request) {
 }
 
 /*
-	requestHandler handles all incoming requests and routes them to the correct
-	function accordingly, or returns a 404 if a non-existent resource is requested.
+requestHandler handles all incoming requests and routes them to the correct
+function accordingly, or returns a 404 if a non-existent resource is requested.
 */
 func requestHandler(w http.ResponseWriter, r *http.Request) {
 	switch r.URL.Path {
